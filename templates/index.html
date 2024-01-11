@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* CSS HERE */
+    </style>
+    <title>Fake News Prediction</title>
+</head>
+
+<body>
+    <div class="login-box">
+        <h2>Detect Fake News</h2>
+        <form id="predictionForm">
+            <div class="user-box">
+                <input type="text" id="title" name="title" required>
+                <label>Title</label>
+            </div>
+            <div class="user-box">
+                <input type="text" id="body" name="body" required>
+                <label>Body</label>
+            </div>
+            <button id="predict">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Predict
+            </button>
+            <div id="predictionResult"></div>
+        </form>
+    </div>
+    <script>
+        document.getElementById('predict').addEventListener('click', function (event) {
+            event.preventDefault();
+            // Get form data
+            const title = document.getElementById('title').value;
+            const body = document.getElementById('body').value;
+
+            // Make a POST request to the /predict endpoint
+            fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title, body })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Display the prediction result
+                    document.getElementById('predictionResult').innerText = `Prediction Result: ${data.prediction == 1 ? "Fake" : "Real"}`;
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+
+</html>
